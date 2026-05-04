@@ -49,6 +49,12 @@ function PosterColumn({ items, side, label, rankPrefix, scoreKey }) {
             <div className={styles.inner}>
               <div className={styles.rankBadge}>{rankPrefix}{i + 1}</div>
 
+              <a
+                href={`https://myanimelist.net/anime/${anime.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.posterLink}
+              >
               <div className={styles.poster}>
                 {anime.imageLarge || anime.image ? (
                   <img
@@ -62,6 +68,7 @@ function PosterColumn({ items, side, label, rankPrefix, scoreKey }) {
                 )}
                 <div className={styles.shine} />
               </div>
+              </a>
 
               <div className={styles.info}>
                 <p className={styles.infoTitle}>{anime.title}</p>
