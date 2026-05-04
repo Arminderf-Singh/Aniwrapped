@@ -1,0 +1,33 @@
+.wrapper { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-sm); }
+.empty { color: var(--ink-3); font-size: 14px; }
+.header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+}
+.title { font-family: var(--font-display); font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.subtitle { font-size: 12px; color: var(--ink-3); }
+.legend { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--ink-3); }
+.legendCell { width: 11px; height: 11px; border-radius: 2px; }
+
+.heatmapScroll { overflow-x: auto; padding-bottom: 6px; }
+.heatmap { display: flex; gap: 6px; min-width: 700px; }
+.dayLabels {
+  display: flex; flex-direction: column; gap: 2px;
+  padding-top: 20px; width: 26px; flex-shrink: 0;
+}
+.dayLabel { font-size: 9px; color: var(--ink-4); height: 11px; display: flex; align-items: center; }
+.grid { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.monthRow { display: flex; gap: 2px; height: 16px; }
+.monthCell { width: 13px; flex-shrink: 0; position: relative; }
+.monthLabel { position: absolute; font-size: 9px; color: var(--ink-3); white-space: nowrap; }
+.weeksRow { display: flex; gap: 2px; }
+.weekCol { display: flex; flex-direction: column; gap: 2px; }
+.cell { width: 11px; height: 11px; border-radius: 2px; transition: transform 0.1s; cursor: default; }
+.cell:hover { transform: scale(1.4); z-index: 1; }
+
+/* Warm intensity levels , cream to deep amber-rose */
+.intensity0 { background: var(--paper-dark); }
+.intensity1 { background: #e8c8b0; }
+.intensity2 { background: #d4a080; }
+.intensity3 { background: #c47850; }
+.intensity4 { background: var(--sakura-deep); }

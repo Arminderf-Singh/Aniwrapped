@@ -1,0 +1,97 @@
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 14px;
+}
+.archetypeCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+/* Faint Japanese characters as watermark */
+.archetypeCard::before {
+  content: '趣味';
+  position: absolute;
+  bottom: -10px; right: 10px;
+  font-family: var(--font-serif);
+  font-size: 90px;
+  color: var(--sakura);
+  opacity: 0.07;
+  pointer-events: none;
+  line-height: 1;
+}
+.archetypeInner {
+  display: flex; gap: 18px; align-items: flex-start;
+  margin-bottom: 20px;
+}
+.archetypeIcon {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  color: var(--sakura-deep);
+  flex-shrink: 0;
+  line-height: 1.2;
+}
+.archetype {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.description { font-size: 14px; color: var(--ink-2); line-height: 1.65; }
+.traits { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--border); padding-top: 16px; }
+.trait { display: flex; align-items: flex-start; gap: 10px; }
+.traitIcon { color: var(--amber); font-size: 12px; flex-shrink: 0; margin-top: 2px; }
+.traitText { font-size: 13px; color: var(--ink-3); line-height: 1.5; }
+
+/* Genre side panel */
+.genrePanel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+}
+.genrePanelTitle {
+  font-family: var(--font-serif);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 14px;
+}
+.genrePills { display: flex; flex-direction: column; gap: 7px; }
+.genrePill {
+  display: block;
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--paper);
+  border: 1px solid var(--border-mid);
+  color: var(--ink-2);
+  transition: border-color 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.genrePill::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--pill-color);
+  border-radius: 0;
+}
+.genrePill:hover { border-color: var(--pill-color); }
+
+@media (max-width: 768px) {
+  .wrapper { grid-template-columns: 1fr; }
+  .genrePanel { max-width: 100%; }
+  .genrePills { flex-direction: row; flex-wrap: wrap; }
+}

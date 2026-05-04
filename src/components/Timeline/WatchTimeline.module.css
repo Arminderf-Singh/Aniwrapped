@@ -1,0 +1,251 @@
+.wrapper { display: flex; flex-direction: column; gap: 0; }
+.empty { color: var(--ink-3); font-size: 14px; }
+
+/* Filter strip */
+.filters {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+.filterBtn {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--surface);
+  border: 1.5px solid var(--border-mid);
+  border-radius: 100px;
+  padding: 8px 18px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.filterBtn:hover { border-color: var(--ink-3); color: var(--ink); }
+.filterBtn.active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--cream);
+}
+.filterCount {
+  background: rgba(255,255,255,0.15);
+  border-radius: 100px;
+  padding: 1px 7px;
+  font-size: 11px;
+}
+.filterBtn:not(.active) .filterCount {
+  background: var(--paper-dark);
+  color: var(--ink-3);
+}
+
+/* Timeline spine */
+.timeline {
+  position: relative;
+  padding-left: 0;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 88px;   /* monthLine width (80px) + half dot width (4px) + gap (4px) */
+  top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--border-mid), var(--border), transparent);
+}
+/* Month block */
+.monthBlock { margin-bottom: 48px; }
+
+.monthMarker {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px;
+  position: relative;
+}
+.monthLine {
+  width: 80px; height: 1px;
+  background: var(--border-mid);
+  flex-shrink: 0;
+}
+.monthDot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--cream);
+  border: 2px solid var(--sakura-deep);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  /* nudge to sit exactly on the spine */
+  margin-left: -2px;
+  margin-right: 2px;
+}
+.monthLabel {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.monthCount {
+  font-size: 11px;
+  color: var(--ink-4);
+  background: var(--paper);
+  border: 1px solid var(--border);
+  padding: 2px 10px;
+  border-radius: 100px;
+}
+
+/* Entries column */
+.entries {
+  padding-left: 101px;  /* 80 + 9 + 12 = 101 */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Single entry */
+.entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px 14px 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  position: relative;
+}
+.entry:hover { border-color: var(--border-mid); box-shadow: var(--shadow-sm); transform: translateX(3px); }
+.entryOpen { border-color: var(--border-mid); box-shadow: var(--shadow-sm); }
+
+/* Left: cover */
+.entryLeft { flex-shrink: 0; }
+.coverWrap {
+  position: relative;
+  width: 48px; height: 68px;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.cover { width: 100%; height: 100%; object-fit: cover; }
+.coverPlaceholder {
+  width: 100%; height: 100%;
+  background: var(--paper-dark);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 16px; color: var(--ink-4);
+}
+.scoreBadge {
+  position: absolute;
+  bottom: 3px; right: 3px;
+  width: 20px; height: 20px;
+  border-radius: 4px;
+  font-family: var(--font-display);
+  font-size: 10px; font-weight: 700;
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Body */
+.entryBody { flex: 1; min-width: 0; }
+
+.entryTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.entryTitle {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--ink);
+  flex: 1;
+}
+.entryStatus {
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Date arc , shows start → end span */
+.dateArc {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+.dateFrom, .dateTo {
+  font-size: 11px;
+  color: var(--ink-3);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.arcTrack {
+  flex: 1;
+  height: 3px;
+  background: var(--paper-dark);
+  border-radius: 2px;
+  overflow: hidden;
+  min-width: 40px;
+}
+.arcFill {
+  height: 100%;
+  border-radius: 2px;
+  opacity: 0.7;
+  min-width: 6px;
+}
+.durLabel {
+  font-size: 10px;
+  color: var(--ink-4);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.dateSimple {
+  font-size: 11px;
+  color: var(--ink-3);
+  margin-top: 4px;
+}
+
+/* Expanded extras */
+.genres {
+  display: flex; flex-wrap: wrap; gap: 5px;
+  margin-top: 10px;
+}
+.genre {
+  font-size: 10px;
+  background: var(--paper);
+  border: 1px solid var(--border-mid);
+  border-radius: 4px;
+  padding: 2px 8px;
+  color: var(--ink-3);
+}
+.scoreLabel {
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+/* Caret */
+.caret {
+  color: var(--ink-4);
+  font-size: 18px;
+  align-self: center;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.caretOpen { transform: rotate(90deg); }
+
+.noResults { color: var(--ink-3); font-size: 14px; padding: 24px 0; }
+.hint {
+  font-size: 11px;
+  color: var(--ink-4);
+  margin-top: 24px;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .timeline::before { left: 0; }
+  .entries { padding-left: 0; }
+  .monthMarker { padding-left: 0; }
+  .monthLine { display: none; }
+}

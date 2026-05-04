@@ -1,0 +1,52 @@
+.wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.chart {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+.chartHeader {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px;
+}
+.chartTitle { font-family: var(--font-display); font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
+.meanBadge {
+  font-size: 12px; color: var(--ink-3);
+  background: var(--paper); border: 1px solid var(--border-mid);
+  padding: 4px 12px; border-radius: 100px;
+}
+.meanBadge strong { color: var(--amber); }
+
+/* Histogram */
+.histogram {
+  display: flex; align-items: flex-end; gap: 5px;
+  height: 140px; padding-bottom: 36px;
+  position: relative;
+}
+.bar {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-end; height: 100%;
+  position: relative;
+}
+.barFill {
+  width: 100%; border-radius: 3px 3px 0 0;
+  transition: height 1.2s cubic-bezier(0.16,1,0.3,1);
+  min-height: 2px;
+}
+.barCount {
+  position: absolute; top: -18px;
+  font-size: 10px; color: var(--ink-3);
+}
+.barLabel {
+  position: absolute; bottom: -24px;
+  font-family: var(--font-display); font-size: 11px; font-weight: 700;
+}
+
+/* Line chart */
+.lineChartWrap { position: relative; }
+.lineChart { width: 100%; height: 130px; display: block; }
+.xAxis { display: flex; justify-content: space-between; margin-top: 6px; }
+.xLabel { font-size: 10px; color: var(--ink-4); }
+
+@media (max-width: 768px) { .wrapper { grid-template-columns: 1fr; } }
