@@ -2,9 +2,43 @@
 import { useState, useEffect } from 'react';
 import styles from './AnimeShowcase.module.css';
 
-function PosterColumn({ items, side, label, rankPrefix, scoreKey }) {
+// Dynamically compute card width so all 5 cards + tooltips fit the viewport.
+// A card is 2:3 aspect ratio. Each card slot = cardHeight + paddingBottom (tooltip buffer).
+// Total height used = label(~28px) + 5 * (cardHeight + TOOLTIP_BUFFER)
+// We solve for cardHeight, then cardWidth = cardHeight * (2/3).
+const TOOLTIP_BUFFER = 68; // px below each card for the hover tooltip
+const LABEL_H        = 28; // px for the column label
+const COL_PADDING    = 40; // top+bottom padding of the column
+const CARD_ASPECT    = 2 / 3;
+const MAX_CARD_W     = 110;
+const MIN_CARD_W     = 55;
+
+function useCardWidth() {
+  const [cardWidth, setCardWidth] = useState(MAX_CARD_W);
+
+  useEffect(() => {
+    function recalc() {
+      const vh = window.innerHeight;
+      const available = vh - COL_PADDING - LABEL_H;
+      // Each card takes: cardHeight + TOOLTIP_BUFFER
+      // cardHeight = cardWidth / CARD_ASPECT
+      // So: 5 * (cardWidth / CARD_ASPECT + TOOLTIP_BUFFER) <= available
+      // => cardWidth <= (available / 5 - TOOLTIP_BUFFER) * CARD_ASPECT
+      const ideal = (available / 5 - TOOLTIP_BUFFER) * CARD_ASPECT;
+      const clamped = Math.max(MIN_CARD_W, Math.min(MAX_CARD_W, Math.floor(ideal)));
+      setCardWidth(clamped);
+    }
+
+    recalc();
+    window.addEventListener('resize', recalc);
+    return () => window.removeEventListener('resize', recalc);
+  }, []);
+
+  return cardWidth;
+}
+
+function PosterColumn({ items, side, label, rankPrefix, scoreKey, cardWidth }) {
   const [visible, setVisible] = useState(false);
-  const [hovered, setHovered] = useState(null);
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 600);
@@ -13,14 +47,14 @@ function PosterColumn({ items, side, label, rankPrefix, scoreKey }) {
 
   if (!items || !items.length) return null;
 
-  // Alternate nudge: even cards push outward, odd cards pull inward
-  // This staggers cards so tooltips don't overlap each other
   const TILTS  = ['-5deg', '4deg', '-6deg', '5deg', '-4deg'];
   const SCALES = [1.0, 0.97, 0.94, 0.91, 0.88];
-  // Alternate left/right nudge within the column for breathing room
   const NUDGES = side === 'left'
-    ? ['0px', '18px', '0px', '18px', '0px']   // odd cards indent right
-    : ['0px', '-18px', '0px', '-18px', '0px']; // odd cards indent left
+    ? ['0px', '14px', '0px', '14px', '0px']
+    : ['0px', '-14px', '0px', '-14px', '0px'];
+
+  // Tooltip buffer scales proportionally but never below 52px
+  const tooltipBuffer = Math.max(52, TOOLTIP_BUFFER * (cardWidth / MAX_CARD_W));
 
   return (
     <div
@@ -41,9 +75,9 @@ function PosterColumn({ items, side, label, rankPrefix, scoreKey }) {
             '--scale':      SCALES[i],
             '--nudge':      NUDGES[i],
             '--initial-tx': side === 'left' ? '-130px' : '130px',
+            width:          `${cardWidth}px`,
+            paddingBottom:  `${tooltipBuffer}px`,
           }}
-          onMouseEnter={() => setHovered(i)}
-          onMouseLeave={() => setHovered(null)}
         >
           <div className={styles.drifter}>
             <div className={styles.inner}>
@@ -55,19 +89,19 @@ function PosterColumn({ items, side, label, rankPrefix, scoreKey }) {
                 rel="noopener noreferrer"
                 className={styles.posterLink}
               >
-              <div className={styles.poster}>
-                {anime.imageLarge || anime.image ? (
-                  <img
-                    src={anime.imageLarge || anime.image}
-                    alt={anime.title}
-                    className={styles.img}
-                    draggable={false}
-                  />
-                ) : (
-                  <div className={styles.imgFallback}><span>?</span></div>
-                )}
-                <div className={styles.shine} />
-              </div>
+                <div className={styles.poster}>
+                  {anime.imageLarge || anime.image ? (
+                    <img
+                      src={anime.imageLarge || anime.image}
+                      alt={anime.title}
+                      className={styles.img}
+                      draggable={false}
+                    />
+                  ) : (
+                    <div className={styles.imgFallback}><span>?</span></div>
+                  )}
+                  <div className={styles.shine} />
+                </div>
               </a>
 
               <div className={styles.info}>
@@ -90,6 +124,8 @@ function PosterColumn({ items, side, label, rankPrefix, scoreKey }) {
 }
 
 export default function AnimeShowcase({ topAnime = [], nextWatch = [] }) {
+  const cardWidth = useCardWidth();
+
   if (!topAnime.length && !nextWatch.length) return null;
 
   return (
@@ -101,6 +137,7 @@ export default function AnimeShowcase({ topAnime = [], nextWatch = [] }) {
           label="Top 5"
           rankPrefix="#"
           scoreKey="userScore"
+          cardWidth={cardWidth}
         />
       )}
       {nextWatch.length > 0 && (
@@ -110,6 +147,7 @@ export default function AnimeShowcase({ topAnime = [], nextWatch = [] }) {
           label="Next Watch"
           rankPrefix=""
           scoreKey="mean"
+          cardWidth={cardWidth}
         />
       )}
     </div>
