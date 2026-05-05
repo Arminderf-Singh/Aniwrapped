@@ -126,7 +126,7 @@ function computeStats(rawAnime) {
       genres: e.genres.slice(0, 2),
     }));
 
-  // Top 5 plan-to-watch anime sorted by MAL mean score
+  
   const nextWatch = [...planToWatch]
     .sort((a, b) => (b.mean || 0) - (a.mean || 0))
     .slice(0, 5)

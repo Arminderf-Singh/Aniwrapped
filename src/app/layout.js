@@ -2,8 +2,34 @@ import '../styles/globals.css';
 import { Analytics } from '@vercel/analytics/next';
 
 export const metadata = {
-  title: 'AniWrapped; Your Anime Year in Review',
-  description: 'Discover your anime watching patterns, stats, and taste profile.',
+  title: 'AniWrapped | Your Anime Year in Review',
+  description: 'Discover your anime watching patterns, stats, and taste profile. Powered by MyAnimeList.',
+  metadataBase: new URL('https://aniwrapped.com'),
+  alternates: {
+    canonical: 'https://aniwrapped.com',
+  },
+  openGraph: {
+    title: 'AniWrapped | Your Anime Year in Review',
+    description: 'Discover your anime watching patterns, stats, and taste profile.',
+    url: 'https://aniwrapped.com',
+    siteName: 'AniWrapped',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'AniWrapped | Your Anime Year in Review',
+    description: 'Discover your anime watching patterns, stats, and taste profile.',
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '48x48' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
 };
 
 export default function RootLayout({ children }) {
