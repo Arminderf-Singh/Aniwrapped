@@ -1,7 +1,6 @@
 import '../styles/globals.css';
 import { Analytics } from '@vercel/analytics/next';
 
-
 export const metadata = {
   title: 'AniWrapped; Your Anime Year in Review',
   description: 'Discover your anime watching patterns, stats, and taste profile.',
@@ -34,6 +33,7 @@ export default function RootLayout({ children }) {
           ))}
         </div>
         {children}
+        <Analytics />
       </body>
     </html>
   );
