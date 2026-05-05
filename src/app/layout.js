@@ -1,4 +1,6 @@
 import '../styles/globals.css';
+import { Analytics } from '@vercel/analytics/next';
+
 
 export const metadata = {
   title: 'AniWrapped; Your Anime Year in Review',
