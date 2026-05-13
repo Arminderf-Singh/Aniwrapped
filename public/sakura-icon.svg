@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <g transform="translate(16,16)">
+    <!-- 5 petals at 72° intervals, pink with slight transparency so overlaps blend -->
+    <ellipse cx="0" cy="-8.5" rx="6"   ry="8.5" fill="#e8849a" opacity="0.90" transform="rotate(0)"/>
+    <ellipse cx="0" cy="-8.5" rx="6"   ry="8.5" fill="#e8849a" opacity="0.90" transform="rotate(72)"/>
+    <ellipse cx="0" cy="-8.5" rx="6"   ry="8.5" fill="#e8849a" opacity="0.90" transform="rotate(144)"/>
+    <ellipse cx="0" cy="-8.5" rx="6"   ry="8.5" fill="#e8849a" opacity="0.90" transform="rotate(216)"/>
+    <ellipse cx="0" cy="-8.5" rx="6"   ry="8.5" fill="#e8849a" opacity="0.90" transform="rotate(288)"/>
+    <!-- petal highlights -->
+    <ellipse cx="0" cy="-9"   rx="3.2" ry="5.5" fill="#fce4ea" opacity="0.55" transform="rotate(0)"/>
+    <ellipse cx="0" cy="-9"   rx="3.2" ry="5.5" fill="#fce4ea" opacity="0.55" transform="rotate(72)"/>
+    <ellipse cx="0" cy="-9"   rx="3.2" ry="5.5" fill="#fce4ea" opacity="0.55" transform="rotate(144)"/>
+    <ellipse cx="0" cy="-9"   rx="3.2" ry="5.5" fill="#fce4ea" opacity="0.55" transform="rotate(216)"/>
+    <ellipse cx="0" cy="-9"   rx="3.2" ry="5.5" fill="#fce4ea" opacity="0.55" transform="rotate(288)"/>
+    <!-- centre disc -->
+    <circle cx="0" cy="0" r="4.2" fill="#c47838"/>
+    <circle cx="0" cy="0" r="2.8" fill="#f5b060"/>
+    <circle cx="0" cy="0" r="1.4" fill="#fff8e0"/>
+    <!-- specular -->
+    <circle cx="-0.6" cy="-0.7" r="0.7" fill="#fff" opacity="0.80"/>
+  </g>
+</svg>

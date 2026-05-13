@@ -87,8 +87,15 @@ export default function WatchTimeline({ entries }) {
 
         {allMonths.map((month, mi) => {
           const items = grouped[month];
+          // Stagger each month block and its entries for a cascading effect
+          const blockDelay = `${mi * 60}ms`;
+
           return (
-            <div key={month} className={styles.monthBlock}>
+            <div
+              key={month}
+              className={styles.monthBlock}
+              style={{ '--block-delay': blockDelay }}
+            >
               <div className={styles.monthMarker}>
                 <div className={styles.monthLine} />
                 <div className={styles.monthDot} />
@@ -103,11 +110,14 @@ export default function WatchTimeline({ entries }) {
                   const isOpen = expanded === key;
                   const durMonths = getDurationMonths(entry.watchStart, entry.watchEnd);
                   const hasArc = entry.watchStart && entry.watchEnd && durMonths > 0;
+                  // Stagger each entry within the month
+                  const entryDelay = `${mi * 60 + i * 50}ms`;
 
                   return (
                     <div
                       key={key}
                       className={styles.entry + (isOpen ? ' ' + styles.entryOpen : '')}
+                      style={{ '--entry-delay': entryDelay }}
                       onClick={() => setExpanded(isOpen ? null : key)}
                     >
                       <div className={styles.entryLeft}>

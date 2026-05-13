@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import styles from './wrapped.module.css';
@@ -10,6 +10,7 @@ import ActivityHeatmap from '../../../components/Timeline/ActivityHeatmap';
 import WatchTimeline from '../../../components/Timeline/WatchTimeline';
 import TasteProfile from '../../../components/Dashboard/TasteProfile';
 import AnimeShowcase from '../../../components/Dashboard/AnimeShowcase';
+import SakuraLoader from '../../../components/SakuraLoader/SakuraLoader';
 
 const LOAD_STEPS = [
   'Fetching your anime list…',
@@ -22,10 +23,13 @@ const LOAD_STEPS = [
 export default function WrappedPage() {
   const params = useParams();
   const username = decodeURIComponent(params.username);
-  const [stats, setStats] = useState(null);
-  const [error, setError] = useState('');
-  const [loadStep, setLoadStep] = useState(0);
+  const [stats, setStats]         = useState(null);
+  const [error, setError]         = useState('');
+  const [loadStep, setLoadStep]   = useState(0);
+  const [loaderDone, setLoaderDone] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
+
+  const handleLoaderComplete = useCallback(() => setLoaderDone(true), []);
 
   useEffect(() => {
     let i = 0;
@@ -53,6 +57,20 @@ export default function WrappedPage() {
     return () => clearInterval(t);
   }, [username]);
 
+  // Show sakura loader until the animation completes (and data / error is ready)
+  if (!loaderDone) {
+    return (
+      <>
+        <SakuraLoader
+          dataReady={!!(stats || error)}
+          onComplete={handleLoaderComplete}
+          loadSteps={LOAD_STEPS}
+          stepIndex={loadStep}
+        />
+      </>
+    );
+  }
+
   if (error) return (
     <div className={styles.center}>
       <div className={styles.errorBox}>
@@ -61,16 +79,6 @@ export default function WrappedPage() {
         <p>{error}</p>
         <Link href="/" className={styles.backBtn}>← Try again</Link>
       </div>
-    </div>
-  );
-
-  if (!stats) return (
-    <div className={styles.center}>
-      <div className={styles.loader}>
-        <div className={styles.loaderRing} />
-        <div className={styles.loaderInner}>桜</div>
-      </div>
-      <p className={styles.loadStep}>{LOAD_STEPS[loadStep]}</p>
     </div>
   );
 
@@ -190,8 +198,25 @@ function ContactModal({ onClose }) {
 }
 
 function Section({ num, title, children }) {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold: 0.07, rootMargin: '0px 0px -32px 0px' }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <section className={styles.section}>
+    <section
+      ref={ref}
+      className={`${styles.section} ${visible ? styles.sectionVisible : ''}`}
+    >
       <div className={styles.sectionHeader}>
         <span className={styles.sectionNum}>{num}</span>
         <span className={styles.sectionTitle}>{title}</span>

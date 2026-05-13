@@ -36,19 +36,44 @@
   --shadow-sm:   0 2px 8px rgba(28,21,16,0.08);
   --shadow-md:   0 4px 24px rgba(28,21,16,0.1);
   --shadow-lg:   0 8px 48px rgba(28,21,16,0.14);
+
+  /* ── Motion tokens (impeccable: expo curves, no bounce) ── */
+  --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);   /* expo-out: entering */
+  --ease-in:   cubic-bezier(0.7, 0, 0.84, 0);   /* expo-in:  leaving  */
+  --ease-io:   cubic-bezier(0.65, 0, 0.35, 1);  /* ease-in-out: toggles */
+
+  /* ── Focus ring (WCAG AA, visible for keyboard users) ── */
+  --focus-ring: 0 0 0 2px var(--cream), 0 0 0 4px var(--sakura-deep);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+* { user-select: none; -webkit-user-select: none; }
 html { scroll-behavior: smooth; }
 
 body {
   background: var(--cream);
   color: var(--ink);
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: 1rem;           /* 16px — minimum for comfortable body reading */
   line-height: 1.65;
   min-height: 100vh;
   overflow-x: hidden;
+  font-optical-sizing: auto;
+  font-variant-numeric: tabular-nums;
+  font-kerning: normal;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+}
+
+/* Balanced headings — browser picks better break points */
+h1, h2, h3, h4 {
+  text-wrap: balance;
+}
+
+/* Consistent focus rings for keyboard users */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius);
 }
 
 ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -64,9 +89,18 @@ body {
   border-radius: var(--radius-lg);
   padding: 28px;
   box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.25s, transform 0.25s;
+  transition:
+    box-shadow  0.22s var(--ease-out),
+    transform   0.22s var(--ease-out),
+    border-color 0.2s var(--ease-out);
 }
-.card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    border-color: var(--border-mid);
+  }
+}
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }

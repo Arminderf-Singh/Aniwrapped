@@ -33,7 +33,9 @@
   margin-bottom: 8px;
   opacity: 0;
   transform: translateY(6px);
-  transition: opacity 0.5s ease 200ms, transform 0.5s ease 200ms;
+  transition:
+    opacity   0.5s cubic-bezier(0.16, 1, 0.3, 1) 200ms,
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) 200ms;
 }
 .columnLabelVisible {
   opacity: 1;
@@ -62,14 +64,17 @@
 .inner {
   position: relative;
   transform: translateX(var(--initial-tx, 0px)) rotate(var(--rotate, 0deg)) scale(var(--scale, 1));
-  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) var(--delay, 0ms);
+  /* expo-out: decisive entrance, no overshoot */
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) var(--delay, 0ms);
 }
 .cardVisible .inner {
   transform: translateX(var(--nudge, 0px)) rotate(var(--rotate, 0deg)) scale(var(--scale, 1));
 }
-.card:hover .inner {
-  transform: translateX(var(--nudge, 0px)) rotate(0deg) scale(1.1) !important;
-  transition: transform 0.22s cubic-bezier(0.34, 1.2, 0.64, 1) !important;
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .inner {
+    transform: translateX(var(--nudge, 0px)) rotate(0deg) scale(1.08) !important;
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
 }
 
 /* ── Rank badge ── */
@@ -118,9 +123,11 @@
   display: block;
   user-select: none;
   filter: saturate(0.92) brightness(0.97);
-  transition: filter 0.3s;
+  transition: filter 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.card:hover .img { filter: saturate(1.1) brightness(1.03); }
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .img { filter: saturate(1.1) brightness(1.03); }
+}
 
 .imgFallback {
   width: 100%;
@@ -161,11 +168,15 @@
   text-align: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease, bottom 0.2s ease;
+  transition:
+    opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    bottom  0.22s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 20;
   box-shadow: 0 4px 16px rgba(0,0,0,0.35);
 }
-.card:hover .info { opacity: 1; bottom: 6px; }
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .info { opacity: 1; bottom: 6px; }
+}
 
 .infoTitle {
   font-family: var(--font-display, serif);

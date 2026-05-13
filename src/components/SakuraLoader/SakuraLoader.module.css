@@ -1,0 +1,83 @@
+/* ══════════════════════════════════════════════════════════
+   Sakura Loader — sprite sheet bloom + cream wash reveal
+
+   Motion philosophy:
+   • Sprite canvas drives the bud→bloom sequence
+   • CSS drives the overlay fade and cream wash
+   • expo-out  cubic-bezier(0.16, 1, 0.3, 1)  — entering
+   • expo-in   cubic-bezier(0.7, 0, 0.84, 0)  — leaving
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Overlay ── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: var(--grad-hero);
+  overflow: hidden;
+  pointer-events: all;
+  transition: opacity 0.75s cubic-bezier(0.7, 0, 0.84, 0);
+}
+.overlayOut {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Sprite canvas ── */
+.spriteCanvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: min(340px, 88vw);
+  height: auto;
+  mix-blend-mode: multiply;
+  filter:
+    drop-shadow(0 0 22px rgba(232, 160, 176, 0.6))
+    drop-shadow(0 0 52px rgba(184,  77, 110, 0.22));
+}
+
+/* ══════════════════════════════════════════════════════════
+   LOADING TEXT
+   ══════════════════════════════════════════════════════════ */
+.loadText {
+  position: absolute;
+  bottom: 11%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  font-family: var(--font-serif);
+  color: var(--ink-3);
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+  animation: loadTextIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes loadTextIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0);   }
+}
+
+/* ══════════════════════════════════════════════════════════
+   CREAM WASH
+   ══════════════════════════════════════════════════════════ */
+.creamWash {
+  position: absolute;
+  inset: 0;
+  background: var(--cream);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0ms;
+}
+.creamWashOn {
+  opacity: 0.94;
+  transition: opacity 2.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ══════════════════════════════════════════════════════════
+   ACCESSIBILITY
+   ══════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .overlay     { transition-duration: 0.25s !important; }
+  .loadText    { animation-duration:  0.01ms !important; }
+  .creamWashOn { transition-duration: 0.4s   !important; }
+}

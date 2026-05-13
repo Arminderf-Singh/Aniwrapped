@@ -71,24 +71,22 @@
   display: block;
   padding: 8px 14px;
   border-radius: var(--radius);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
-  background: var(--paper);
-  border: 1px solid var(--border-mid);
+  /* Full-perimeter colored border + subtle tint — no side stripe */
+  background: color-mix(in oklch, var(--pill-color) 9%, var(--paper));
+  border: 1px solid color-mix(in oklch, var(--pill-color) 38%, transparent);
   color: var(--ink-2);
-  transition: border-color 0.2s;
-  position: relative;
-  overflow: hidden;
+  transition:
+    border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    background   0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.genrePill::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 3px;
-  background: var(--pill-color);
-  border-radius: 0;
+@media (hover: hover) and (pointer: fine) {
+  .genrePill:hover {
+    border-color: color-mix(in oklch, var(--pill-color) 65%, transparent);
+    background: color-mix(in oklch, var(--pill-color) 16%, var(--paper));
+  }
 }
-.genrePill:hover { border-color: var(--pill-color); }
 
 @media (max-width: 768px) {
   .wrapper { grid-template-columns: 1fr; }

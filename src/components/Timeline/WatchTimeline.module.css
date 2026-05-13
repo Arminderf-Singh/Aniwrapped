@@ -1,41 +1,70 @@
-.wrapper { display: flex; flex-direction: column; gap: 0; }
-.empty { color: var(--ink-3); font-size: 14px; }
+/* ══════════════════════════════════════════════════════════
+   Watch Timeline — clean editorial layout
+   Design principles:
+   • More breathing room inside cards
+   • Clearer typographic hierarchy (title > date > meta)
+   • Restrained colour — only status colour carries meaning
+   • expo-out on every interactive transition
+   ══════════════════════════════════════════════════════════ */
 
-/* Filter strip */
+.wrapper { display: flex; flex-direction: column; gap: 0; }
+.empty   { color: var(--ink-3); font-size: 14px; }
+
+/* ── Filter Strip ── */
 .filters {
   display: flex; gap: 8px; flex-wrap: wrap;
-  margin-bottom: 36px;
+  margin-bottom: 40px;
 }
 .filterBtn {
   display: flex; align-items: center; gap: 7px;
   background: var(--surface);
   border: 1.5px solid var(--border-mid);
   border-radius: 100px;
-  padding: 8px 18px;
+  padding: 9px 20px;
   font-family: var(--font-body);
   font-size: 13px;
+  font-weight: 500;
   color: var(--ink-3);
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  transition:
+    border-color 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    color        0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    background   0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    transform    0.12s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow   0.18s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.filterBtn:hover { border-color: var(--ink-3); color: var(--ink); }
+@media (hover: hover) and (pointer: fine) {
+  .filterBtn:hover { border-color: var(--ink-3); color: var(--ink); }
+}
+.filterBtn:active { transform: scale(0.96); }
+.filterBtn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
 .filterBtn.active {
   background: var(--ink);
   border-color: var(--ink);
   color: var(--cream);
+  box-shadow: 0 2px 12px rgba(28,21,16,0.18);
+}
+.filterBtn.active:focus-visible {
+  box-shadow: 0 2px 12px rgba(28,21,16,0.18), var(--focus-ring);
 }
 .filterCount {
-  background: rgba(255,255,255,0.15);
   border-radius: 100px;
   padding: 1px 7px;
   font-size: 11px;
+  font-weight: 600;
+}
+.filterBtn.active .filterCount {
+  background: rgba(255,255,255,0.18);
 }
 .filterBtn:not(.active) .filterCount {
   background: var(--paper-dark);
   color: var(--ink-3);
 }
 
-/* Timeline spine */
+/* ── Timeline Spine ── */
 .timeline {
   position: relative;
   padding-left: 0;
@@ -43,22 +72,39 @@
 .timeline::before {
   content: '';
   position: absolute;
-  left: 88px;   /* monthLine width (80px) + half dot width (4px) + gap (4px) */
+  left: 88px;
   top: 0; bottom: 0;
   width: 1px;
-  background: linear-gradient(to bottom, var(--border-mid), var(--border), transparent);
+  background: linear-gradient(
+    to bottom,
+    var(--sakura)     0%,
+    var(--border-mid) 18%,
+    var(--border)     65%,
+    transparent       100%
+  );
 }
-/* Month block */
-.monthBlock { margin-bottom: 48px; }
 
+/* ── Month Block — staggered entrance ── */
+.monthBlock {
+  margin-bottom: 56px;
+  animation: monthBlockIn 0.55s cubic-bezier(0.16, 1, 0.3, 1)
+             var(--block-delay, 0ms) both;
+}
+
+@keyframes monthBlockIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ── Month Marker ── */
 .monthMarker {
   display: flex; align-items: center; gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 22px;
   position: relative;
 }
 .monthLine {
   width: 80px; height: 1px;
-  background: var(--border-mid);
+  background: linear-gradient(to right, transparent, var(--border-mid));
   flex-shrink: 0;
 }
 .monthDot {
@@ -69,60 +115,110 @@
   flex-shrink: 0;
   position: relative;
   z-index: 1;
-  /* nudge to sit exactly on the spine */
   margin-left: -2px;
   margin-right: 2px;
 }
+/* Pulse ring on the month dot */
+.monthDot::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1px solid var(--sakura-deep);
+  opacity: 0;
+  animation: dotPulse 3.8s ease-out infinite;
+  animation-delay: var(--block-delay, 0ms);
+}
+@keyframes dotPulse {
+  0%   { opacity: 0;    transform: scale(1);   }
+  16%  { opacity: 0.40; }
+  100% { opacity: 0;    transform: scale(2.8); }
+}
 .monthLabel {
   font-family: var(--font-display);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--ink);
-  letter-spacing: -0.01em;
 }
 .monthCount {
-  font-size: 11px;
+  font-size: 10px;
+  font-weight: 500;
   color: var(--ink-4);
   background: var(--paper);
   border: 1px solid var(--border);
-  padding: 2px 10px;
+  padding: 3px 11px;
   border-radius: 100px;
+  letter-spacing: 0.04em;
 }
 
-/* Entries column */
+/* ── Entries Column ── */
 .entries {
-  padding-left: 101px;  /* 80 + 9 + 12 = 101 */
+  padding-left: 101px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-/* Single entry */
+/* ── Single Entry Card ── */
 .entry {
   display: flex;
   align-items: flex-start;
-  gap: 14px;
+  gap: 16px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 14px 16px 14px 14px;
+  border-radius: var(--radius-xl);
+  padding: 16px 18px 16px 16px;
   cursor: pointer;
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  transition:
+    border-color 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow   0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    transform    0.22s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
+  animation: entrySlideIn 0.45s cubic-bezier(0.16, 1, 0.3, 1)
+             var(--entry-delay, 0ms) both;
 }
-.entry:hover { border-color: var(--border-mid); box-shadow: var(--shadow-sm); transform: translateX(3px); }
-.entryOpen { border-color: var(--border-mid); box-shadow: var(--shadow-sm); }
 
-/* Left: cover */
-.entryLeft { flex-shrink: 0; }
-.coverWrap {
+@keyframes entrySlideIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0);     }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .entry:hover {
+    border-color: var(--border-mid);
+    box-shadow: var(--shadow-sm);
+    transform: translateX(5px);
+  }
+}
+.entry:active { transform: translateX(2px) scale(0.99); }
+
+/* Open (expanded) state */
+.entryOpen {
+  border-color: var(--sakura);
+  box-shadow: var(--shadow-sm), 0 0 0 3px rgba(232,160,176,0.10);
+}
+
+/* ── Cover Art ── */
+.entryLeft  { flex-shrink: 0; }
+.coverWrap  {
   position: relative;
-  width: 48px; height: 68px;
-  border-radius: 6px;
+  width: 52px; height: 74px;
+  border-radius: 8px;
   overflow: hidden;
   flex-shrink: 0;
+  box-shadow: 0 3px 12px rgba(28,21,16,0.14);
+  transition: box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.cover { width: 100%; height: 100%; object-fit: cover; }
+.cover {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .entry:hover .cover     { transform: scale(1.07); }
+  .entry:hover .coverWrap { box-shadow: 0 6px 20px rgba(28,21,16,0.20); }
+}
 .coverPlaceholder {
   width: 100%; height: 100%;
   background: var(--paper-dark);
@@ -132,45 +228,49 @@
 }
 .scoreBadge {
   position: absolute;
-  bottom: 3px; right: 3px;
-  width: 20px; height: 20px;
-  border-radius: 4px;
+  bottom: 4px; right: 4px;
+  width: 22px; height: 22px;
+  border-radius: 5px;
   font-family: var(--font-display);
-  font-size: 10px; font-weight: 700;
+  font-size: 11px; font-weight: 700;
   color: #fff;
   display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.28);
 }
 
-/* Body */
+/* ── Entry Body ── */
 .entryBody { flex: 1; min-width: 0; }
 
 .entryTop {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: 10px;
+  margin-bottom: 6px;
 }
 .entryTitle {
   font-size: 14px;
-  font-weight: 500;
-  line-height: 1.4;
+  font-weight: 600;
+  line-height: 1.35;
   color: var(--ink);
   flex: 1;
+  text-wrap: pretty;
 }
 .entryStatus {
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   white-space: nowrap;
   flex-shrink: 0;
+  opacity: 0.85;
 }
 
-/* Date arc , shows start → end span */
+/* ── Date Arc ── */
 .dateArc {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 4px;
+  margin-top: 6px;
 }
 .dateFrom, .dateTo {
   font-size: 11px;
@@ -180,7 +280,7 @@
 }
 .arcTrack {
   flex: 1;
-  height: 3px;
+  height: 2px;
   background: var(--paper-dark);
   border-radius: 2px;
   overflow: hidden;
@@ -189,8 +289,15 @@
 .arcFill {
   height: 100%;
   border-radius: 2px;
-  opacity: 0.7;
+  opacity: 0.65;
   min-width: 6px;
+  transform-origin: left center;
+  animation: arcGrow 0.9s cubic-bezier(0.16, 1, 0.3, 1)
+             var(--entry-delay, 0ms) both;
+}
+@keyframes arcGrow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
 }
 .durLabel {
   font-size: 10px;
@@ -198,54 +305,84 @@
   white-space: nowrap;
   flex-shrink: 0;
 }
-
 .dateSimple {
   font-size: 11px;
   color: var(--ink-3);
-  margin-top: 4px;
+  margin-top: 5px;
 }
 
-/* Expanded extras */
+/* ── Expanded: genres + score ── */
 .genres {
   display: flex; flex-wrap: wrap; gap: 5px;
-  margin-top: 10px;
+  margin-top: 12px;
+  animation: expandIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .genre {
   font-size: 10px;
+  font-weight: 500;
   background: var(--paper);
-  border: 1px solid var(--border-mid);
-  border-radius: 4px;
-  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 10px;
   color: var(--ink-3);
+  letter-spacing: 0.02em;
+  transition:
+    background   0.15s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+    color        0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .genre:hover {
+    background: var(--paper-dark);
+    border-color: var(--border-mid);
+    color: var(--ink-2);
+  }
 }
 .scoreLabel {
   font-size: 12px;
-  font-weight: 500;
-  margin-top: 8px;
+  font-weight: 600;
+  margin-top: 10px;
+  animation: expandIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
 }
 
-/* Caret */
+@keyframes expandIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+/* ── Caret ── */
 .caret {
   color: var(--ink-4);
   font-size: 18px;
   align-self: center;
-  transition: transform 0.2s;
+  transition:
+    transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+    color     0.18s ease-out;
   flex-shrink: 0;
   line-height: 1;
 }
-.caretOpen { transform: rotate(90deg); }
+.entry:hover .caret { color: var(--ink-3); }
+.caretOpen { transform: rotate(90deg); color: var(--sakura-deep); }
 
-.noResults { color: var(--ink-3); font-size: 14px; padding: 24px 0; }
+/* ── Empty / Hint ── */
+.noResults {
+  color: var(--ink-3);
+  font-size: 14px;
+  padding: 28px 0;
+}
 .hint {
   font-size: 11px;
   color: var(--ink-4);
-  margin-top: 24px;
+  margin-top: 28px;
   text-align: center;
+  letter-spacing: 0.03em;
 }
 
+/* ── Mobile ── */
 @media (max-width: 640px) {
   .timeline::before { left: 0; }
-  .entries { padding-left: 0; }
-  .monthMarker { padding-left: 0; }
-  .monthLine { display: none; }
+  .entries          { padding-left: 0; }
+  .monthMarker      { padding-left: 0; }
+  .monthLine        { display: none; }
+  .entry            { gap: 12px; padding: 14px; }
 }
