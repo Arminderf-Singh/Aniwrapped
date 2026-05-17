@@ -1,4 +1,4 @@
-# AniWrapped 🎌
+# AniWrapped
 
 > Spotify Wrapped, but for anime. Visualise your MAL watching history with stats, score analytics, a GitHub-style activity heatmap, and your taste profile.
 
