@@ -1,104 +1,72 @@
-# AniWrapped
+# AniWrapped -- Your Anime Year in Review
 
-> Spotify Wrapped, but for anime. Visualise your MAL watching history with stats, score analytics, a GitHub-style activity heatmap, and your taste profile.
+A personalized yearly recap for MyAnimeList users, inspired by Spotify Wrapped.
 
-## Tech Stack
+**Live site: [aniwrapped.com](https://aniwrapped.com)**
 
-- **Next.js 14** (App Router)
-- **React 18**
-- **Standard CSS Modules** (no Tailwind, no CSS-in-JS)
-- **MyAnimeList API v2**
+---
 
-## Setup
+## What is AniWrapped?
 
-### 1. Clone & install
+AniWrapped transforms your MyAnimeList data into a beautiful, interactive year-in-review experience. See your watch history, genre preferences, ratings, and viewing trends all in one place.
 
-```bash
-npm install
-```
+Built as a side project, it grew from 0 to 1,000+ users within a week of launch.
 
-### 2. Get a MAL API key
-
-1. Go to [myanimelist.net/apiconfig](https://myanimelist.net/apiconfig)
-2. Click **Create ID**
-3. Fill in App Name: `AniWrapped`, App Type: `web`, Redirect URL: `http://localhost:3000`
-4. Copy your **Client ID**
-
-### 3. Configure environment
-
-```bash
-cp .env.local.example .env.local
-```
-
-Open `.env.local` and paste your Client ID:
-
-```
-MAL_CLIENT_ID=your_client_id_here
-```
-
-> **Note:** `MAL_CLIENT_SECRET` is only needed for OAuth (user login). For public list access, Client ID alone is sufficient.
-
-### 4. Run
-
-```bash
-npm run dev
-```
-
-Visit [http://localhost:3000](http://localhost:3000), enter any MAL username, and explore.
-
-## Project Structure
-
-```
-src/
-├── app/
-│   ├── api/
-│   │   ├── mal-proxy/route.js      # Proxies MAL API (keeps key server-side)
-│   │   └── user-stats/route.js     # Computes all analytics from raw list
-│   ├── wrapped/[username]/
-│   │   ├── page.js                 # Main stats page
-│   │   └── wrapped.module.css
-│   ├── page.js                     # Landing / username input
-│   └── layout.js
-├── components/
-│   ├── Dashboard/
-│   │   ├── OverviewCards.js        # Animated stat cards
-│   │   └── TasteProfile.js         # Archetype + genre pills
-│   ├── Charts/
-│   │   ├── ScoreChart.js           # Distribution histogram + line chart
-│   │   └── GenreChart.js           # Genre bars + studio bubbles
-│   └── Timeline/
-│       ├── ActivityHeatmap.js      # GitHub-style 52-week heatmap
-│       └── TimelineCards.js        # Anime cards grouped by year
-└── styles/
-    └── globals.css                 # Design tokens + global styles
-```
+---
 
 ## Features
 
-| Feature | Description |
+- Personalized analytics including watch counts, hours logged, genre breakdowns, and rating distributions
+- Interactive visuals with dynamic charts and animated stat cards
+- Fully responsive layout optimized for desktop and mobile
+- Optimized async data fetching under real traffic load
+- MAL API integration that pulls your real watch history directly from MyAnimeList
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
 |---|---|
-| Overview Cards | Total days, episodes, hours, mean score, completion rate |
-| Score Distribution | Histogram coloured by score (1–10) |
-| Score Over Time | SVG line chart of monthly score averages |
-| Genre Breakdown | Horizontal bar chart of top 12 genres |
-| Studio Bubbles | Bubble grid sized by frequency |
-| Activity Heatmap | 52-week GitHub-style grid (intensity by completions) |
-| Timeline Cards | Anime cards grouped by year with cover art, score, status |
-| Taste Profile | Rule-based archetype + rating style + commitment traits |
+| Frontend | React, TypeScript, Tailwind CSS |
+| Build Tool | Vite |
+| APIs | MyAnimeList (MAL) REST API |
+| Hosting | Netlify, Cloudflare |
 
-## Adding AI-Generated Insights (optional)
+---
 
-The `tasteProfile` in `/api/user-stats/route.js` is currently rule-based. To upgrade to AI-generated summaries, replace the `generateTasteProfile()` function with a call to an LLM passing the computed stats:
+## Getting Started
 
-```js
-// Example: call OpenAI/Anthropic with stats context
-const prompt = `Based on these anime stats: ${JSON.stringify(stats)}, write a 2-sentence taste profile...`;
+```bash
+git clone https://github.com/Arminderf-Singh/Aniwrapped.git
+cd Aniwrapped
+npm install
+npm run dev
 ```
 
-## Roadmap
+You will need a MyAnimeList API client ID. Create one at [myanimelist.net/apiconfig](https://myanimelist.net/apiconfig) and add it to a `.env` file:
 
-- [ ] User comparison (taste similarity score)
-- [ ] Seasonal watching trends
-- [ ] Share card (og:image generation)
-- [ ] OAuth login for private lists
-- [ ] Caching with Redis/Vercel KV
+```env
+VITE_MAL_CLIENT_ID=your_client_id_here
+```
+
+---
+
+## Screenshots
+
+> Add screenshots here
+
+---
+
+## What I Learned
+
+- Scaling API-driven applications beyond the happy path
+- Optimising async data fetching under unpredictable load spikes
+- Designing experiences that feel personal at scale
+- Managing deployment workflows under live traffic
+
+---
+
+## License
+
+MIT
